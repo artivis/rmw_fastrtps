@@ -350,6 +350,7 @@ __rmw_create_node(
             security_logging_file_path,
             property_policy.properties()))
         {
+          RMW_SET_ERROR_MSG("couldn't parse security logging config file!");
           return nullptr;
         }
       }
