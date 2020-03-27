@@ -17,6 +17,8 @@
 #include <utility>
 #include <string>
 
+#include <regex>
+
 #include "rmw/error_handling.h"
 #include "rmw/qos_profiles.h"
 #include "rmw/types.h"
@@ -112,7 +114,10 @@ bool apply_logging_configuration_from_file(
   eprosima::fastrtps::rtps::PropertySeq & properties)
 {
   tinyxml2::XMLDocument document;
-  document.LoadFile(xml_file_path.c_str());
+  if (tinyxml2::XML_SUCCESS != document.LoadFile(xml_file_path.c_str())) {
+    RMW_SET_ERROR_MSG(("Could not open file: " + xml_file_path).c_str());
+    return RMW_RET_ERROR;
+  }
 
   auto log_element = document.FirstChildElement("security_log");
   if (log_element == nullptr) {
