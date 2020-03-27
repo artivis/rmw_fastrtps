@@ -113,9 +113,12 @@ bool apply_logging_configuration_from_file(
   const std::string & xml_file_path,
   eprosima::fastrtps::rtps::PropertySeq & properties)
 {
+  const auto stripped_xml_file_path =
+      std::regex_replace(xml_file_path, std::regex("file://"), "");
+
   tinyxml2::XMLDocument document;
-  if (tinyxml2::XML_SUCCESS != document.LoadFile(xml_file_path.c_str())) {
-    RMW_SET_ERROR_MSG(("Could not open file: " + xml_file_path).c_str());
+  if (tinyxml2::XML_SUCCESS != document.LoadFile(stripped_xml_file_path.c_str())) {
+    RMW_SET_ERROR_MSG(("Could not open file: " + stripped_xml_file_path).c_str());
     return RMW_RET_ERROR;
   }
 
